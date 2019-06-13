@@ -32,7 +32,13 @@ class CaptchaServiceProvider extends ServiceProvider
             $siteKey = $this->loadSiteKey($siteKey);
 
             return  "<script src='https://www.google.com/recaptcha/api.js'></script>".
-                    "<div class='g-recaptcha' data-sitekey='{$siteKey}'></div>";
+                    "<script type='text/javascript'>".
+                    "document.addEventListener('DOMContentLoaded', function(){".
+                    "document.getElementById('captcha_submit').disabled = true;".
+                    "}, false);".
+                    "function enableBtn(){document.getElementById('captcha_submit').disabled = false;}".
+                    "</script>".
+                    "<div class='g-recaptcha' data-sitekey='{$siteKey}' data-callback='enableBtn'></div>";
         });
 
         Blade::directive('invisiblecaptcha', function ($siteKey = null) {
@@ -66,7 +72,7 @@ class CaptchaServiceProvider extends ServiceProvider
 
     /**
      * load reCAPTCHA Site key
-     * 
+     *
      * @param  string  $siteKey
      * @return string
      */
